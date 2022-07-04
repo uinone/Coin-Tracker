@@ -15,10 +15,12 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 30px 0px;
 `;
 
 const Title = styled.h1`
   font-size: 48px;
+  text-transform: uppercase;
   color: ${(props) => props.theme.accentColor};
 `;
 
@@ -53,6 +55,14 @@ const Img = styled.img`
   margin-right: 15px;
 `;
 
+const NavigationContainer = styled.div`
+  display: flex;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: black;
+`;
+
 interface ICoin {
   id: string;
   name: string;
@@ -67,11 +77,12 @@ function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
   return (
     <Container>
+      <NavigationContainer />
       <Helmet>
-        <title>코인</title>
+        <title>Coin Tracker</title>
       </Helmet>
       <Header>
-        <Title>코인</Title>
+        <Title>Coin Tracker</Title>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
