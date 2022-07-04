@@ -1,3 +1,5 @@
+import { faHome, faMoon } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
@@ -55,14 +57,6 @@ const Img = styled.img`
   margin-right: 15px;
 `;
 
-const NavigationContainer = styled.div`
-  display: flex;
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  background-color: black;
-`;
-
 interface ICoin {
   id: string;
   name: string;
@@ -77,7 +71,6 @@ function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
   return (
     <Container>
-      <NavigationContainer />
       <Helmet>
         <title>Coin Tracker</title>
       </Helmet>

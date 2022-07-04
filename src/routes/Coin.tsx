@@ -12,6 +12,8 @@ import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 import { Helmet } from "react-helmet";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -147,6 +149,31 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
+const NavigationContainer = styled.div`
+  display: flex;
+  position: fixed;
+  top: 30px;
+  left: 30px;
+`;
+
+const NavigationIcon = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    cursor: pointer;
+  }
+  svg {
+    font-size: 22px;
+    background-color: inherit;
+    color: black;
+  }
+`;
+
 function Coin() {
   const location = useLocation();
   const state = location.state as RounterState;
@@ -169,6 +196,13 @@ function Coin() {
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <NavigationContainer>
+        <NavigationIcon>
+          <Link to={"/"}>
+            <FontAwesomeIcon icon={faHome} />
+          </Link>
+        </NavigationIcon>
+      </NavigationContainer>
       <Helmet>
         <title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
