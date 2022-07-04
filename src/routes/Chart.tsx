@@ -17,6 +17,11 @@ interface ICoinHistory {
   market_cap: number;
 }
 
+interface ICandleChartItem {
+  x: Date;
+  y: number[];
+}
+
 function Chart({ coinId }: ChartProps) {
   const { isLoading: historyLoading, data: historyData } = useQuery<
     ICoinHistory[]
@@ -29,13 +34,21 @@ function Chart({ coinId }: ChartProps) {
         "Loading chart..."
       ) : (
         <ReactApexChart
-          type="line"
+          type="candlestick"
           series={[
             {
               name: "Price",
-              data: historyData?.map((props) =>
-                parseFloat(props.close)
-              ) as number[],
+              data: historyData?.map((props) => {
+                return {
+                  x: new Date(props.time_open * 1000),
+                  y: [
+                    parseFloat(props.open),
+                    parseFloat(props.high),
+                    parseFloat(props.low),
+                    parseFloat(props.close),
+                  ],
+                };
+              }) as ICandleChartItem[],
             },
           ]}
           options={{
@@ -67,26 +80,19 @@ function Chart({ coinId }: ChartProps) {
                 show: false,
               },
               type: "datetime",
-              categories: historyData?.map((data) =>
-                new Date(data.time_close * 1000).toISOString()
-              ),
             },
-            fill: {
-              type: "gradient",
-              gradient: {
-                gradientToColors: ["#0be881"],
-                stops: [0, 100],
+            plotOptions: {
+              candlestick: {
+                colors: {
+                  upward: "#ff009d",
+                  downward: "#0be881",
+                },
               },
             },
-            colors: ["#0fbcf9"],
             tooltip: {
               y: {
                 formatter: (value) => `$${value.toFixed(2)}`,
               },
-            },
-            stroke: {
-              curve: "smooth",
-              width: 4,
             },
           }}
         />
