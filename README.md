@@ -1,46 +1,71 @@
-# Getting Started with Create React App
+# Coin tracker with React.js
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[coinpaprika](https://coinpaprika.com/ko/)와 [nomadcoder](https://nomadcoders.co/)의 api를 사용해서 상위 100개 코인에 대한 정보를 볼 수 있는 앱을 만들어봤어요.
 
-## Available Scripts
+nomadcoder의 강의를 보면서 만들어보았습니다.
 
-In the project directory, you can run:
+## 알아낸 것들
 
-### `npm start`
+1. styled-component를 통해 css를 적용한 컴포넌트를 쉽게 생성 가능하다.
+2. 특정 상태를 하위 컴포넌트에 전달하기 위해 차례대로 인자에 넣어서 전달하는 방법이 있으나 이는 굉장히 비효율적이다. 이를 위해 상태 관리를 할 수 있는 Recoil과 같은 도구가 생겼다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 겪었던 문제들
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. react-router-dom v6에서의 nested router 사용법
+2. 타입 스크립트의 IntrinsicAttributes 오류
 
-### `npm test`
+### react-router-dom v6에서의 nested router 사용법
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+nested router에 대한 개념은 알았지만 이를 어떻게 사용할지 몰랐습니다.
 
-### `npm run build`
+그래서 강의 댓글에 달려있는 여러 해결법들을 찾아보면서 나름대로 [블로그에 정리해봤어요.](https://ideadummy.tistory.com/65)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 타입 스크립트의 IntrinsicAttributes 오류
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+타입체크와 관련된 IntrinsicAttributes 오류입니다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+컴포넌트에 객체 내부의 프로퍼티가 아닌
 
-### `npm run eject`
+객체 자체를 넘기려는 상황인데, 다음과 같은 오류가 발생했습니다.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+> Type '{ data: Data; }' is not assignable to type 'IntrinsicAttributes & Data'.
+> Property 'data' does not exist on type 'IntrinsicAttributes & Data'.ts(2322)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+문제가 된 코드입니다.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```ts
+interface Data {
+  id: string;
+  name: string;
+  symbol: string;
+}
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+function Component(data: Data) {
+return <h1>{data.name}</h1>;
+}
 
-## Learn More
+function App() {
+const [data, setData] = useState<Data>({});
+return <Component data={data}>;
+}
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+위와 같이 작성해도 함수의 인자로 Data 인터페이스를 갖는 객체가 전달될 것이라 명시할 수 있다고 생각했습니다.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+하지만 타입 명시를 제대로 못해줘서 일어난 오류 같았습니다.
+
+#### 구글링을 통해 찾은 방법
+
+```ts
+function Component({ data }: { data: Data }) {
+  return <h1>{data.name}</h1>;
+}
+```
+
+위와 같이 object destructuring을 통해 객체를 통으로 전달 가능했습니다.
+
+#### 의문점
+
+하지만 왜 굳이 object destructuring을 통해 객체를 전달해야하는지는 이해하지 못했습니다😥
+
+방법을 찾게되면 다시 업데이트 할 생각이에요.
