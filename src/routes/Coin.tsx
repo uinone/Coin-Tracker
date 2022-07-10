@@ -13,7 +13,9 @@ import Chart from "./Chart";
 import Price from "./Price";
 import { Helmet } from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -151,6 +153,7 @@ const Tab = styled.span<{ isActive: boolean }>`
 
 export const NavigationContainer = styled.div`
   display: flex;
+  flex-direction: column;
   position: fixed;
   top: 30px;
   left: 30px;
@@ -164,6 +167,7 @@ export const NavigationIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 10px;
   &:hover {
     cursor: pointer;
   }
@@ -178,6 +182,11 @@ function Coin() {
   const location = useLocation();
   const state = location.state as RounterState;
   const { coinId } = useParams();
+
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prevMode) => !prevMode);
+
   const priceMatch = useMatch("/:coinId/price");
   const chartMatch = useMatch("/:coinId/chart");
 
@@ -202,6 +211,15 @@ function Coin() {
             <FontAwesomeIcon icon={faHome} />
           </Link>
         </NavigationIcon>
+        {isDark ? (
+          <NavigationIcon onClick={toggleDarkAtom}>
+            <FontAwesomeIcon icon={faSun} />
+          </NavigationIcon>
+        ) : (
+          <NavigationIcon onClick={toggleDarkAtom}>
+            <FontAwesomeIcon icon={faMoon} />
+          </NavigationIcon>
+        )}
       </NavigationContainer>
       <Helmet>
         <title>

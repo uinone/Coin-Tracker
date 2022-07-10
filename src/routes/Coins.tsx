@@ -1,10 +1,13 @@
-import { faHome, faMoon } from "@fortawesome/free-solid-svg-icons";
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
+import { isDarkAtom } from "../atoms";
+import { NavigationContainer, NavigationIcon } from "./Coin";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -68,12 +71,30 @@ interface ICoin {
 }
 
 function Coins() {
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prevMode) => !prevMode);
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
   return (
     <Container>
       <Helmet>
         <title>Coin Tracker</title>
       </Helmet>
+      <NavigationContainer>
+        {isDark ? (
+          <NavigationIcon onClick={toggleDarkAtom}>
+            <Link to={"/"}>
+              <FontAwesomeIcon icon={faSun} />
+            </Link>
+          </NavigationIcon>
+        ) : (
+          <NavigationIcon onClick={toggleDarkAtom}>
+            <Link to={"/"}>
+              <FontAwesomeIcon icon={faMoon} />
+            </Link>
+          </NavigationIcon>
+        )}
+      </NavigationContainer>
       <Header>
         <Title>Coin Tracker</Title>
       </Header>
