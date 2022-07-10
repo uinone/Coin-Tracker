@@ -11,7 +11,7 @@ const PriceInfo = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: white;
+  background-color: ${(props) => props.theme.cardBgColor};
   padding: 30px 20px;
   border-radius: 5px;
   color: ${(props) => props.theme.bgColor};

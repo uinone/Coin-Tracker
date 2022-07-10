@@ -101,7 +101,8 @@ export interface PriceData {
 const OverView = styled.div`
   display: flex;
   justify-content: space-around;
-  background-color: #19191f;
+  background-color: ${(props) => props.theme.cardBgColor};
+  color: ${(props) => props.theme.bgColor};
   padding: 20px;
   border-radius: 10px;
   font-weight: 100;
@@ -118,7 +119,6 @@ const OverviewItem = styled.div`
       margin-bottom: 8px;
     }
   }
-  color: ${(props) => props.theme.textColor};
 `;
 
 const Discription = styled.p`
@@ -139,28 +139,28 @@ const Tab = styled.span<{ isActive: boolean }>`
   text-transform: uppercase;
   font-size: 13px;
   font-weight: 400;
-  background-color: #19191f;
+  background-color: ${(props) => props.theme.cardBgColor};
   padding: 10px 0px;
   border-radius: 10px;
   color: ${(props) =>
-    props.isActive ? props.theme.accentColor : props.theme.textColor};
+    props.isActive ? props.theme.accentColor : props.theme.bgColor};
   a {
     display: block;
   }
 `;
 
-const NavigationContainer = styled.div`
+export const NavigationContainer = styled.div`
   display: flex;
   position: fixed;
   top: 30px;
   left: 30px;
 `;
 
-const NavigationIcon = styled.div`
+export const NavigationIcon = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: white;
+  background-color: ${(props) => props.theme.cardBgColor};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -170,7 +170,7 @@ const NavigationIcon = styled.div`
   svg {
     font-size: 22px;
     background-color: inherit;
-    color: black;
+    color: ${(props) => props.theme.bgColor};
   }
 `;
 
